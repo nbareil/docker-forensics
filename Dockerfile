@@ -1,15 +1,14 @@
 FROM debian:jessie
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 
 RUN apt-get update &&                           \
-    apt-get upgrade &&                          \
-    apt-get install -y --no-install-recommends  \
-                    python-pip                  \
-                    vim &&                      \
-    rm -rf /var/cache/apt/archives/*deb /var/lib/apt/lists/*
-
-RUN apt-get update &&                           \
+    apt-get -y upgrade &&                       \
     apt-get install -y --no-install-recommends  \
                python-pip                       \
+               vim                              \
                ntfs-3g                          \
                python-geoip                     \
                ssdeep                           \
@@ -25,16 +24,38 @@ RUN apt-get update &&                           \
                python-wxgtk3.0                  \
                python-jinja2                    \
                python-lxml                      \
+               libbde-utils                     \
                tshark &&                        \
     rm -rf /var/cache/apt/archives/*deb /var/lib/apt/lists/*
 
 
 RUN pip install                                                                                                    \
-           https://github.com/williballenthin/python-registry/archive/201238f06cf24c39a10371def9aea5d503102c09.zip \
-           https://github.com/williballenthin/python-ntfs/archive/1b2341c7bdbc4cbdcdecff24b551250f441e3d2c.zip     \
+           https://github.com/williballenthin/python-registry/archive/acec3e995f8c8f4bc82d447a631a4039d91002c2.zip \
+           https://github.com/williballenthin/python-ntfs/archive/506293d68ae0324fa149dbcc6ffe618f29295b50.zip     \
            https://github.com/williballenthin/python-evtx/archive/e645d4de8ee87e20665b42b8805e5702ac076a0d.zip     \
            https://github.com/log2timeline/plaso/archive/cb1beb1640505293776c8a34c4a849975ef28bbe.zip              \
-           https://github.com/nbareil/INDXParse/archive/c50622d8938ac894058960c7098c5cd4366183cc.zip               \
+           https://github.com/williballenthin/INDXParse/archive/83dae169b79a466bc49432b33d4415f2d63a2d7d.zip               \
            https://github.com/nbareil/shellbags/archive/6ed191fdf686fdffced9498130f79660b5b0daa6.zip
+
+RUN apt-get update && \
+    apt-get install -yyyy --no-install-recommends automake autoconf2.13 autopoint libtool make wget && \
+    rm -rf /var/cache/apt/archives/*deb /var/lib/apt/lists/*
+
+RUN wget https://github.com/libyal/libvshadow/releases/download/20141023/libvshadow-alpha-20141023.tar.gz &&       \
+    tar zxvf libvshadow-alpha-20141023.tar.gz && \
+    (cd libvshadow-20141023 && ./configure && make -j12 install) && \
+    rm -fr libvshadow-20141023 libvshadow-alpha-20141023.tar.gz
+
+RUN wget https://github.com/libyal/libvmdk/releases/download/20141021/libvmdk-alpha-20141021.tar.gz && \
+    tar xf libvmdk-alpha-20141021.tar.gz && \
+    (cd libvmdk-20141021 && ./configure && make -j 12 && make install) && \
+    rm -fr libvmdk-20141021 libvmdk-20141021.tar.gz
+
+RUN wget https://github.com/libyal/libvhdi/releases/download/20150110/libvhdi-alpha-20150110.tar.gz && \
+    tar xf libvhdi-alpha-20150110.tar.gz && \
+    (cd libvhdi-20150110 && ./configure && make -j 12 install) && \
+    rm -fr libvhdi-alpha-20150110.tar.gz libvhdi-20150110
+
+RUN pip install distorm3
 
 CMD bash
