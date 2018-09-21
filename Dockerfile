@@ -25,6 +25,7 @@ RUN apt-get update &&                           \
                python-jinja2                    \
                python-lxml                      \
                libbde-utils                     \
+               libfuse-dev                      \
                tshark &&                        \
     rm -rf /var/cache/apt/archives/*deb /var/lib/apt/lists/*
 
@@ -41,21 +42,22 @@ RUN apt-get update && \
     apt-get install -yyyy --no-install-recommends automake autoconf2.13 autopoint libtool make wget && \
     rm -rf /var/cache/apt/archives/*deb /var/lib/apt/lists/*
 
-RUN wget https://github.com/libyal/libvshadow/releases/download/20141023/libvshadow-alpha-20141023.tar.gz &&       \
-    tar zxvf libvshadow-alpha-20141023.tar.gz && \
-    (cd libvshadow-20141023 && ./configure && make -j12 install) && \
-    rm -fr libvshadow-20141023 libvshadow-alpha-20141023.tar.gz
+RUN wget https://github.com/libyal/libvshadow/releases/download/20170902/libvshadow-alpha-20170902.tar.gz &&       \
+    tar zxvf libvshadow-alpha-20170902.tar.gz && \
+    (cd libvshadow-20170902 && ./configure && make -j12 install) && \
+    rm -fr libvshadow-20170902 libvshadow-alpha-20170902.tar.gz
 
-RUN wget https://github.com/libyal/libvmdk/releases/download/20141021/libvmdk-alpha-20141021.tar.gz && \
-    tar xf libvmdk-alpha-20141021.tar.gz && \
-    (cd libvmdk-20141021 && ./configure && make -j 12 && make install) && \
-    rm -fr libvmdk-20141021 libvmdk-20141021.tar.gz
+RUN wget https://github.com/libyal/libvmdk/releases/download/20170226/libvmdk-alpha-20170226.tar.gz && \
+    tar xf libvmdk-alpha-20170226.tar.gz && \
+    (cd libvmdk-20170226 && ./configure && make -j 12 && make install) && \
+    rm -fr libvmdk-20170226 libvmdk-20170226.tar.gz
 
-RUN wget https://github.com/libyal/libvhdi/releases/download/20150110/libvhdi-alpha-20150110.tar.gz && \
-    tar xf libvhdi-alpha-20150110.tar.gz && \
-    (cd libvhdi-20150110 && ./configure && make -j 12 install) && \
-    rm -fr libvhdi-alpha-20150110.tar.gz libvhdi-20150110
+RUN wget https://github.com/libyal/libvhdi/releases/download/20170223/libvhdi-alpha-20170223.tar.gz && \
+    tar xf libvhdi-alpha-20170223.tar.gz && \
+    (cd libvhdi-20170223 && ./configure && make -j 12 install) && \
+    rm -fr libvhdi-alpha-20170223.tar.gz libvhdi-20170223
 
 RUN pip install distorm3
+RUN ldconfig
 
 CMD bash
